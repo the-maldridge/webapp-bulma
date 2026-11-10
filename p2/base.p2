@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ siteTitle|default:"Application" }}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/core/css/bulma.min.css">
+    {% block head %}{% endblock %}
+  </head>
+  <body class="{% block bodyclass %}{% endblock %}">
+    <header>
+      {% block header %}
+      <nav class="navbar is-link" role="navigation" aria-label="Primary">
+        <div class="container">
+          <div class="navbar-brand">
+            <a class="navbar-item has-text-weight-bold is-size-5" href="/">{{ siteTitle|default:"Application" }}</a>
+            <button id="wa-nav-toggle"
+                    class="navbar-burger"
+                    type="button"
+                    aria-label="Menu"
+                    aria-expanded="false"
+                    aria-controls="wa-nav-menu">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <div id="wa-nav-menu" class="navbar-menu">
+            {% include "@core/fragments/nav.p2" %}
+          </div>
+        </div>
+      </nav>
+      {% endblock %}
+    </header>
+
+    <main class="section" id="main">
+      <div class="container">
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        {% block footer %}
+        <p class="is-size-7 has-text-grey">build {{ buildVersion|default:"dev" }}</p>
+        {% endblock %}
+      </div>
+    </footer>
+
+    <script src="/static/core/js/navbar.js" defer></script>
+  </body>
+</html>

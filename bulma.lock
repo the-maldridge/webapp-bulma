@@ -1,0 +1,25 @@
+# Which Bulma release this theme vendors, and what its files have to contain.
+#
+# The CSS itself is not committed. It is fetched by `go generate ./...` and
+# served from the theme's own asset tree, so this file is the only record in the
+# repository of what the vendored bundle is supposed to be. That makes the
+# digests load-bearing rather than informational: the fetcher refuses to write a
+# file whose digest does not match what is recorded here.
+#
+# The digests were produced from the npm registry's tarball for 1.0.4 and
+# cross-checked against the SHA-1 and SRI integrity values that registry
+# publishes for it, so this pins the authentic upstream artifact rather than
+# whatever a mirror happened to serve on the day it was vendored.
+#
+# To update: change the version, run the fetcher with -digest, paste the result
+# here, then run `go generate ./...` and the tests.
+
+version=1.0.4
+
+# Digest of the downloaded .tgz itself, so a partially-correct archive cannot be
+# assembled from two different releases.
+tarball_sha256=4a3669880f72a69d13c34eafc294073ca106927e3ca8c534f56828a837b99105
+
+# Per-file digests, keyed by where the file lands in this package.
+sha256:static/css/bulma.min.css=67fa26df1ca9e95d8f2adc7c04fa1b15fa3d24257470ebc10cc68b9aab914bee
+sha256:static/css/LICENSE=fbe7d8ec18b72eded15d79ca73da5eef9e8e258f5f1aff83e4e993e69752279c

@@ -1,0 +1,34 @@
+{% extends "@core/base.p2" %}
+
+{% comment %}
+  Shared error page skeleton.
+
+  The reference ID is the whole point of this page. Everything specific about a
+  failure (the table, the path, the upstream message) is in a log line the
+  viewer cannot read and should not be able to, so this page's job is to hand
+  them the one string that connects what they saw to what the server recorded.
+
+  The error text appears only when the framework says it may. That decision is
+  passed in rather than read from a flag here, so this template stays correct if
+  the disclosure rule changes; what it must never do is render a value it was
+  handed without being told to.
+{% endcomment %}
+
+{% block title %}{{ status }} {{ statusText }} · {{ siteTitle|default:"Application" }}{% endblock %}
+
+{% block content %}
+<section class="box">
+  <p class="title is-1 has-text-danger">{{ status }}</p>
+  <h1 class="title is-4">{{ statusText }}</h1>
+
+  {% block detail %}{% endblock %}
+
+  {% if errorDetail %}
+  <pre class="is-family-code is-size-7">{{ errorDetail }}</pre>
+  {% endif %}
+
+  {% if requestId %}
+  <p class="is-size-7 has-text-grey">Reference: <code class="is-family-code">{{ requestId }}</code></p>
+  {% endif %}
+</section>
+{% endblock %}

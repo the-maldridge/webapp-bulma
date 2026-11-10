@@ -1,0 +1,57 @@
+{% comment %}
+  Navigation fragment.
+
+  This template renders only the inside of the navbar its parent already opened,
+  because Bulma's menu is a container the parent controls: the brand and the
+  mobile toggle belong to the navbar, while what is below them belongs to
+  whoever is navigating. A fragment that emitted its own <nav> would nest one
+  navigation inside another, which is what the default theme's markup does and
+  what Bulma's CSS has no rule for.
+
+  The items arrive already filtered: deciding whether a viewer may see a link
+  belongs to the authorization layer, and a template that re-implemented it here
+  would be a second answer to "what is TASKS:ADMIN", one that disagrees with
+  the first as soon as the rules grow a case, and disagrees in the direction of
+  showing a link the route behind it then refuses.
+
+  The active item comes from pageBase, which the framework derives from the
+  request path, so a page cannot highlight the wrong thing by forgetting to say
+  where it is.
+{% endcomment %}
+<div class="navbar-start">
+  {% for item in navElements %}
+  {% if item.Children %}
+  <div class="navbar-item has-dropdown is-hoverable">
+    <span class="navbar-link{% if item.Base == pageBase %} is-active{% endif %}">{{ item.Label }}</span>
+    <div class="navbar-dropdown">
+      {% for child in item.Children %}
+      <a class="navbar-item" href="{{ child.Href }}">{{ child.Label }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
+  <a class="navbar-item{% if item.Base == pageBase %} is-active{% endif %}"
+     href="{{ item.Href }}"{% if item.Base == pageBase %} aria-current="page"{% endif %}>
+    {%- if item.Icon %}<span class="icon is-small" aria-hidden="true">{{ item.Icon }}</span> {% endif -%}
+    {{ item.Label }}
+  </a>
+  {% endif %}
+  {% empty %}
+  <span class="navbar-item is-inline-tablet has-text-grey">No sections available</span>
+  {% endfor %}
+</div>
+
+<div class="navbar-end">
+  {% if isAuthenticated %}
+  <div class="navbar-item">
+    <form method="post" action="{{ signOutURL|default:'/logout' }}">
+      {{ csrfInput }}
+      <button type="submit" class="button is-small is-inverted is-outlined">Sign out {{ user.Identity }}</button>
+    </form>
+  </div>
+  {% else %}
+  <div class="navbar-item">
+    <a class="button is-small is-inverted is-outlined" href="{{ signInURL|default:'/login' }}">Sign in</a>
+  </div>
+  {% endif %}
+</div>

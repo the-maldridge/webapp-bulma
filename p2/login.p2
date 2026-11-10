@@ -1,0 +1,71 @@
+{% extends "@core/base.p2" %}
+
+{% comment %}
+  Sign-in form.
+
+  The form posts to itself and the password field is never repopulated. A
+  framework that remembered a submitted password so the user could "try again"
+  would write it into the browser's form state, and into whatever a misconfigured
+  cache stored of the page.
+
+  The failure message is one value for every reason the attempt failed, and it is
+  the caller's job to pass that one value: the difference between "no such
+  account" and "wrong password" is what an enumeration attack reads.
+{% endcomment %}
+
+{% block title %}Sign in · {{ siteTitle|default:"Application" }}{% endblock %}
+
+{% block content %}
+<div class="columns is-centered">
+  <div class="column is-half-tablet is-one-third-desktop">
+    <div class="box">
+      <h1 class="title is-4">Sign in</h1>
+
+      {% if loginError %}
+      <div class="notification is-danger is-light" role="alert">{{ loginError }}</div>
+      {% endif %}
+
+      <form method="post" action="{{ action|default:'/login' }}">
+        {{ csrfInput }}
+
+        <div class="field">
+          <label class="label" for="wa-username">Username</label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              id="wa-username"
+              name="username"
+              value="{{ username|default:'' }}"
+              autocomplete="username"
+              autocapitalize="none"
+              spellcheck="false"
+              required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="wa-password">Password</label>
+          <div class="control">
+            <input
+              class="input"
+              type="password"
+              id="wa-password"
+              name="password"
+              autocomplete="current-password"
+              required>
+          </div>
+        </div>
+
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+        <div class="field">
+          <div class="control">
+            <button type="submit" class="button is-primary is-fullwidth">Sign in</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
