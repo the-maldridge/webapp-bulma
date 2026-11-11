@@ -5,10 +5,13 @@
 // job is one HTTP GET, one tar walk, and one write, all of which are in the
 // standard library. Nothing here needs a toolchain beyond Go.
 //
-// Output is deliberately not committed. A vendored artifact nobody can
-// reproduce is a liability, and a committed 200KB minified file is a diff nobody
-// reviews, so the repository keeps this program and a lock file recording the
-// digests it expects, and the CSS is fetched on demand by the build pipeline.
+// What it writes is committed, and this program is how that committed bundle is
+// reproduced rather than trusted. The lock file records the digest of every byte
+// the program is allowed to place on disk and of the tarball they came from, so
+// advancing a release means changing a version, running the program, and reading
+// the diff it produces; a bundle that does not match its own lock is a test
+// failure, and the check runs with no network so a build can ask the question
+// without fetching anything.
 //
 // The lock file is the single source of truth for the version. There is no
 // version constant in this program to drift out of step with it, which is the

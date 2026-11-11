@@ -1,10 +1,11 @@
 # Which Bulma release this theme vendors, and what its files have to contain.
 #
-# The CSS itself is not committed. It is fetched by `go generate ./...` and
-# served from the theme's own asset tree, so this file is the only record in the
-# repository of what the vendored bundle is supposed to be. That makes the
-# digests load-bearing rather than informational: the fetcher refuses to write a
-# file whose digest does not match what is recorded here.
+# The bundle is committed, so this file is not what a build reads; it is the
+# record of what the committed bundle is supposed to be, and the thing both
+# `fetchbulma -check` and the test suite verify it against. That makes the
+# digests load-bearing rather than informational: a committed file whose bytes do
+# not match what is recorded here is a test failure, not a review problem someone
+# notices later.
 #
 # The digests were produced from the npm registry's tarball for 1.0.4 and
 # cross-checked against the SHA-1 and SRI integrity values that registry
