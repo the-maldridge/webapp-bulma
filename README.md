@@ -47,10 +47,12 @@ was hand-edited fails the suite.
 
 ## Development
 
-Checking out this repository alone is not enough to build it right now, because
-the framework it depends on is not yet published as a tagged release. Until it
-is, develop with the two checkouts side by side and a `go.work` that is
-gitignored:
+A clone of this repository alone builds and tests, because the framework is an
+ordinary published dependency with a `require` and a `go.sum` like anyone else's.
+
+The workspace is for the one thing a version pin cannot do: developing a change
+that spans both repositories. Check them out side by side and let a gitignored
+`go.work` point this module at the local framework.
 
 ```
 parent/
@@ -58,17 +60,16 @@ parent/
 └── webapp-bulma/    # this repository
 ```
 
-```
-cd webapp-bulma
+```sh
 go work init .
 go work use ../webapp
 ```
 
-The `require` for the framework is intentionally absent from `go.mod`: any
-explicit version of an unpublished module is resolved against the network and
-fails. The workspace supplies the sibling instead. Once `webapp` has a tag,
-this module gets a real `require` and `go.sum`, and a lone clone builds with
-plain `go build ./...`.
+While the workspace exists it supersedes the require, so framework edits are
+picked up without waiting for a release. It stays gitignored because it names a
+directory that only exists in a checkout that cloned both, and somebody who
+cloned only the theme has to keep resolving the framework from its published
+version; committing the workspace would turn that into "directory not found".
 
 ## Advancing the Bulma release
 
