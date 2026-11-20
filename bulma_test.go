@@ -28,6 +28,10 @@ const licensePath = "static/css/LICENSE"
 // is committed.
 const navScript = "static/js/navbar.js"
 
+// themeCSS is the theme's own stylesheet: page structure the bundle's helper
+// classes do not express, linked by base.p2 beside the bundle.
+const themeCSS = "static/css/theme.css"
+
 // lockPath is the committed record of which release the bundle is.
 const lockPath = "bulma.lock"
 
@@ -248,6 +252,26 @@ func TestBundledScriptIsServed(t *testing.T) {
 	if !strings.Contains(string(data), "wa-nav-toggle") {
 		t.Errorf("%s does not reference the toggle base.p2 renders, so the two have drifted apart",
 			navScript)
+	}
+}
+
+// TestOwnStylesheetIsServed is the same guarantee as the script test, for the
+// stylesheet: the link in base.p2 resolves, and the file still carries the
+// sticky-footer rules the layout relies on. The bundle ships no standalone
+// min-height helper, so these rules live here and nowhere else; losing one
+// silently returns every footer to floating under the last line of a short
+// page, which is the bug this stylesheet was written for.
+func TestOwnStylesheetIsServed(t *testing.T) {
+	data, err := fs.ReadFile(bulma.Static(), "css/theme.css")
+	if err != nil {
+		t.Fatalf("%s is missing from the asset tree (%v), so base.p2 links a stylesheet that answers 404",
+			themeCSS, err)
+	}
+	for _, want := range []string{"min-height: 100vh", "flex: 1 0 auto"} {
+		if !strings.Contains(string(data), want) {
+			t.Errorf("%s no longer carries %q, which is part of keeping the footer at the "+
+				"bottom of the content or the viewport, whichever is lower", themeCSS, want)
+		}
 	}
 }
 

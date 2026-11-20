@@ -1,0 +1,25 @@
+/* The theme's own layout rules, as opposed to the vendored Bulma bundle:
+   page structure that no helper class in the bundle expresses. */
+
+/* Sticky footer: the footer sits at the foot of the content, or at the foot
+   of the viewport, whichever is lower. A short page keeps the footer pinned
+   to the bottom of the window rather than floating under the last line, and
+   a long page lets it follow the content and scroll, because the minimum is
+   what holds — nothing caps the body's height.
+
+   The flex children need their own instructions: main grows to eat the spare
+   height, and the footer never shrinks, since a footer squeezed by a tall
+   neighbour is worse than the gap this removes. */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body > main {
+  flex: 1 0 auto;
+}
+
+body > footer {
+  flex-shrink: 0;
+}
