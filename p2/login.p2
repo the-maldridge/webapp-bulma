@@ -15,7 +15,22 @@
 
 {% block title %}Sign in · {{ siteTitle|default:"Application" }}{% endblock %}
 
+{% comment %}
+  No navbar and no footer: whoever reaches this page holds no identity, so the
+  navbar could offer them only an empty brand and a Sign out of nothing, and
+  the footer would put build information on the one page the public sees. They
+  opt out by overriding the blocks with nothing, which the base now allows by
+  putting those elements inside the blocks rather than around them.
+
+  With the brand gone from the navbar, the site name goes above the box: the
+  page is still the front door, and the browser tab is not the only place it
+  should say whose door this is.
+{% endcomment %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
 {% block content %}
+<p class="has-text-centered title is-3">{{ siteTitle|default:"Application" }}</p>
 <div class="columns is-centered">
   <div class="column is-half-tablet is-one-third-desktop">
     <div class="box">
