@@ -24,10 +24,12 @@
 
   With the brand gone from the navbar, the site name goes above the box: the
   page is still the front door, and the browser tab is not the only place it
-  should say whose door this is.
+  should say whose door this is. The body class is the hook theme.css uses to
+  hold that box in the middle of the window.
 {% endcomment %}
 {% block header %}{% endblock %}
 {% block footer %}{% endblock %}
+{% block bodyclass %}wa-login-page{% endblock %}
 
 {% block content %}
 <p class="has-text-centered title is-3">{{ siteTitle|default:"Application" }}</p>

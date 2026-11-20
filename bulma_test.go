@@ -267,10 +267,15 @@ func TestOwnStylesheetIsServed(t *testing.T) {
 		t.Fatalf("%s is missing from the asset tree (%v), so base.p2 links a stylesheet that answers 404",
 			themeCSS, err)
 	}
-	for _, want := range []string{"min-height: 100vh", "flex: 1 0 auto"} {
-		if !strings.Contains(string(data), want) {
-			t.Errorf("%s no longer carries %q, which is part of keeping the footer at the "+
-				"bottom of the content or the viewport, whichever is lower", themeCSS, want)
+	rules := []struct{ fragment, why string }{
+		{"min-height: 100vh", "keeps the footer at the bottom of the content or the viewport, whichever is lower"},
+		{"flex: 1 0 auto", "lets the main region eat the spare height the footer rule creates"},
+		{"body.wa-login-page #main > .container", "holds the sign-in box in the middle of the window"},
+		{"flex-grow: 0", "cancels the bundle's own flex-grow on .container, without which the auto margins have nothing to centre"},
+	}
+	for _, r := range rules {
+		if !strings.Contains(string(data), r.fragment) {
+			t.Errorf("%s no longer carries %q, which %s", themeCSS, r.fragment, r.why)
 		}
 	}
 }

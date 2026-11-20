@@ -23,3 +23,22 @@ body > main {
 body > footer {
   flex-shrink: 0;
 }
+
+/* The sign-in page, marked by its template with the body class below, keeps
+   its box in the middle of the window rather than under the top edge. The
+   auto margin does the centering instead of justify-content because an auto
+   margin collapses to nothing when the content outgrows the window: a phone
+   in landscape gets a scrollable page rather than one with the top of the
+   form clipped away where nobody can scroll to it. */
+body.wa-login-page #main {
+  display: flex;
+  flex-direction: column;
+}
+
+body.wa-login-page #main > .container {
+  /* flex-grow must go first: Bulma gives .container flex-grow 1, and in a
+     column flex that grows the container down the window, leaving no spare
+     height for the auto margins to centre with. */
+  flex-grow: 0;
+  margin: auto;
+}
