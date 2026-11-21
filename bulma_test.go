@@ -272,6 +272,7 @@ func TestOwnStylesheetIsServed(t *testing.T) {
 		{"flex: 1 0 auto", "lets the main region eat the spare height the footer rule creates"},
 		{"body.wa-login-page #main > .container", "holds the sign-in box in the middle of the window"},
 		{"flex-grow: 0", "cancels the bundle's own flex-grow on .container, without which the auto margins have nothing to centre"},
+		{"color: var(--bulma-navbar-item-color)", "keeps the burger visible against a navbar whose background is the very color the bundle paints the burger with"},
 	}
 	for _, r := range rules {
 		if !strings.Contains(string(data), r.fragment) {

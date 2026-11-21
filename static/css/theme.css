@@ -42,3 +42,15 @@ body.wa-login-page #main > .container {
   flex-grow: 0;
   margin: auto;
 }
+
+/* The mobile menu toggle. Bulma paints the burger with its own
+   --bulma-navbar-burger-color, which is simply the link color, and this
+   navbar is navbar.is-link: the lines arrive painted in exactly the color
+   of the bar behind them, a contrast ratio of one, present in the DOM and
+   absent to the eye. The burger is navbar ink like the title beside it, so
+   it takes the navbar's own ink variable, which every navbar variant —
+   this one and any an application swaps in — already sets to whatever
+   reads against that variant's background. */
+.navbar .navbar-burger {
+  color: var(--bulma-navbar-item-color);
+}
