@@ -11,7 +11,7 @@
   <body class="{% block bodyclass %}{% endblock %}">
     {% block header %}
     <header>
-      <nav class="navbar is-link" role="navigation" aria-label="Primary">
+      <nav class="navbar is-dark" role="navigation" aria-label="Primary">
         <div class="container">
           <div class="navbar-brand">
             <a class="navbar-item has-text-weight-bold is-size-5" href="/">{{ siteTitle|default:"Application" }}</a>
