@@ -6,12 +6,13 @@
     <title>{% block title %}{{ siteTitle|default:"Application" }}{% endblock %}</title>
     <link rel="stylesheet" href="/static/core/css/bulma.min.css">
     <link rel="stylesheet" href="/static/core/css/theme.css">
+    <script src="/static/core/js/theme.js"></script>
     {% block head %}{% endblock %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}">
     {% block header %}
     <header>
-      <nav class="navbar is-dark" role="navigation" aria-label="Primary">
+      <nav class="navbar" role="navigation" aria-label="Primary">
         <div class="container">
           <div class="navbar-brand">
             <a class="navbar-item has-text-weight-bold is-size-5" href="/">{{ siteTitle|default:"Application" }}</a>

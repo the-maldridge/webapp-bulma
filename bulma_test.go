@@ -32,6 +32,10 @@ const navScript = "static/js/navbar.js"
 // classes do not express, linked by base.p2 beside the bundle.
 const themeCSS = "static/css/theme.css"
 
+// themeScript is the theme's light/dark toggle script: the second thing it
+// writes itself, and like navbar.js it is committed rather than vendored.
+const themeScript = "static/js/theme.js"
+
 // lockPath is the committed record of which release the bundle is.
 const lockPath = "bulma.lock"
 
@@ -451,5 +455,45 @@ func TestLockFileShape(t *testing.T) {
 		if !seen[key] {
 			t.Errorf("%s records no %s", lockPath, key)
 		}
+	}
+}
+
+// TestThemeToggleIsWired guards the three halves of the light/dark toggle having
+// drifted apart: the switch the navbar renders, the script that reads it, and the
+// base layout that loads that script.
+//
+// Each half fails silently in a way the others do not reveal. A toggle whose id
+// disagrees with theme.js renders a switch that does nothing; a theme.js that no
+// longer sets data-theme flips a switch that repaints nothing; a base layout that
+// stopped linking the script leaves the switch inert and the page stuck on the
+// bundle's own prefers-color-scheme fallback. The check is that the same id and
+// attribute appear across the files, which is the contract that has no compiler.
+func TestThemeToggleIsWired(t *testing.T) {
+	script, err := fs.ReadFile(bulma.Static(), "js/theme.js")
+	if err != nil {
+		t.Fatalf("%s is missing from the asset tree (%v), so base.p2 links a script that answers 404",
+			themeScript, err)
+	}
+	for _, fragment := range []string{"wa-theme-toggle", "data-theme"} {
+		if !strings.Contains(string(script), fragment) {
+			t.Errorf("%s no longer references %q, so the toggle and the color scheme it sets have drifted apart",
+				themeScript, fragment)
+		}
+	}
+
+	base, err := fs.ReadFile(bulma.FS(), "base.p2")
+	if err != nil {
+		t.Fatalf("ReadFile(base.p2): %v", err)
+	}
+	if !strings.Contains(string(base), "js/theme.js") {
+		t.Error("base.p2 does not load theme.js, so the toggle never runs and the scheme never applies")
+	}
+
+	nav, err := fs.ReadFile(bulma.FS(), "fragments/nav.p2")
+	if err != nil {
+		t.Fatalf("ReadFile(fragments/nav.p2): %v", err)
+	}
+	if !strings.Contains(string(nav), `id="wa-theme-toggle"`) {
+		t.Error("fragments/nav.p2 does not render the switch whose id theme.js looks for, so the toggle is absent")
 	}
 }

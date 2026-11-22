@@ -44,13 +44,99 @@ body.wa-login-page #main > .container {
 }
 
 /* The mobile menu toggle. Bulma paints the burger with its own
-   --bulma-navbar-burger-color, which is simply the link color, and this
-   navbar is navbar.is-link: the lines arrive painted in exactly the color
-   of the bar behind them, a contrast ratio of one, present in the DOM and
-   absent to the eye. The burger is navbar ink like the title beside it, so
-   it takes the navbar's own ink variable, which every navbar variant —
-   this one and any an application swaps in — already sets to whatever
-   reads against that variant's background. */
+   --bulma-navbar-burger-color, which defaults to the link color. That reads
+   against a default navbar, but this navbar follows the light/dark toggle and
+   an application may swap in a variant whose bar background equals that burger
+   color: ink on ink, a contrast ratio of one, present in the DOM and absent to
+   the eye. The burger is navbar ink like the title beside it, so it takes the
+   navbar's own ink variable, which every navbar variant, this one and any an
+   application swaps in, already sets to whatever reads against that variant's
+   background. */
 .navbar .navbar-burger {
   color: var(--bulma-navbar-item-color);
+}
+
+/* Light/dark switch. Bulma 1.0.4 ships no .switch component, so the control
+   the navbar renders is hand-rolled here from Bulma's own tokens, and it is
+   what the theme toggle in fragments/nav.p2 and theme.js drives. The checkbox
+   is visually hidden but kept focusable; the track, thumb, and icon are painted
+   from it so the control is styled without script and the scheme flips on
+   data-theme, not on the switch itself. */
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-track {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.75em;
+  height: 1.5em;
+  border-radius: 1em;
+  background-color: var(--bulma-border);
+  transition: background-color 0.15s ease-in-out;
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 0.125em;
+  left: 0.125em;
+  width: 1.25em;
+  height: 1.25em;
+  border-radius: 50%;
+  background-color: var(--bulma-scheme-main);
+  box-shadow: 0 1px 2px rgba(10, 10, 10, 0.3);
+  transition: transform 0.15s ease-in-out;
+}
+
+.switch input:checked + .switch-track {
+  background-color: var(--bulma-primary);
+}
+
+.switch input:checked + .switch-track .switch-thumb {
+  transform: translateX(1.25em);
+}
+
+.switch input:focus-visible + .switch-track {
+  outline: 2px solid var(--bulma-link);
+  outline-offset: 2px;
+}
+
+.switch-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25em;
+  height: 1.25em;
+  color: var(--bulma-text-strong);
+}
+
+.switch-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* One of the two icons shows at a time: the sun in light mode, the moon in
+   dark, with the checked checkbox being the only signal either rule reads. */
+.switch-icon .icon-moon {
+  display: none;
+}
+
+.switch input:checked ~ .switch-icon .icon-sun {
+  display: none;
+}
+
+.switch input:checked ~ .switch-icon .icon-moon {
+  display: block;
 }
